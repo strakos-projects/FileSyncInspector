@@ -1,0 +1,18 @@
+# Visual Studio a .NET/WPF
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.log
+*.dbmdl
+*.jfm
+
+# Publish profily a testovaci data
+*.Publish.xml
+FileSyncTest/
+modified file.txt
+
+# AI a ShadowCoder
+.shadow-context.local.txt
+AI_Output.txt

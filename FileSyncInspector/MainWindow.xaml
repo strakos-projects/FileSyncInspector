@@ -4,103 +4,154 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileSyncInspector"
+        xmlns:properties="clr-namespace:FileSyncInspector.Properties"
         mc:Ignorable="d"
-         Height="450" Width="800" Title="FileSyncInspector - Porovnání složek">
-    <Grid Margin="10" >
+        Height="650" Width="1000" Title="{x:Static properties:Strings.WindowTitle}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Výběr složek -->
             <RowDefinition Height="Auto"/>
-            <!-- Ovládací tlačítka + ProgressBar -->
-            <RowDefinition Height="auto"/>
-            <!-- Výsledky TreeView -->
-            <RowDefinition Height="auto"/>
+            <!-- Akce a Progress -->
+            <RowDefinition Height="*"/>
+            <!-- Výsledky (zabírá zbylé místo) -->
         </Grid.RowDefinitions>
 
-        <!-- Výběr složek -->
-        <Grid Grid.Row="0" Margin="0,0,0,10">
+        <!-- 1. SEKCE: Výběr složek -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Zdrojová složka -->
-            <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                <TextBlock Text="Zdrojová složka:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <DockPanel>
-                    <TextBox Name="TextBoxSourceFolder" IsReadOnly="True" VerticalAlignment="Center" />
-                    <Button Name="ButtonBrowseSource" Content="Vybrat složku" Margin="5,0,0,0" Click="ButtonBrowseSource_Click" />
-                </DockPanel>
-            </StackPanel>
+            <!-- Zdrojová karta -->
+            <Border Grid.Column="0" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Strings.SourceFolder}" Style="{StaticResource HeaderTextStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Name="TextBoxSourceFolder" Grid.Column="0" IsReadOnly="True" Margin="0,0,10,0"/>
+                        <Button Name="ButtonBrowseSource" Grid.Column="1" Content="{x:Static properties:Strings.Browse}" Width="100" Click="ButtonBrowseSource_Click" Style="{StaticResource SecondaryButton}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
-            <!-- Cílová složka -->
-            <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                <TextBlock Text="Cílová složka:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <DockPanel>
-                    <TextBox Name="TextBoxTargetFolder" IsReadOnly="True" VerticalAlignment="Center" />
-                    <Button Name="ButtonBrowseTarget" Content="Vybrat složku" Margin="5,0,0,0" Click="ButtonBrowseTarget_Click" />
-                </DockPanel>
-            </StackPanel>
+            <!-- Cílová karta -->
+            <Border Grid.Column="2" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="{x:Static properties:Strings.TargetFolder}" Style="{StaticResource HeaderTextStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Name="TextBoxTargetFolder" Grid.Column="0" IsReadOnly="True" Margin="0,0,10,0"/>
+                        <Button Name="ButtonBrowseTarget" Grid.Column="1" Content="{x:Static properties:Strings.Browse}" Width="100" Click="ButtonBrowseTarget_Click" Style="{StaticResource SecondaryButton}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
         </Grid>
 
-        <!-- Ovládací tlačítka a ProgressBar -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,10" >
-            <Button Name="ButtonStart" Content="Spustit porovnání" Width="130" Margin="0,0,10,0" Click="ButtonStart_Click" IsEnabled="False" />
-            <Button Name="ButtonCancel" Content="Zrušit" Width="80" Click="ButtonCancel_Click" IsEnabled="False" />
-            <ProgressBar Name="ProgressBarComparison" Width="200" Height="20" Margin="20,0,0,0" />
-            <Button Content="Přepnout zobrazení"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="5"
-            Click="ToggleView_Click"/>
-        </StackPanel>
+        <!-- 2. SEKCE: Ovládací tlačítka a ProgressBar -->
+        <Border Grid.Row="1" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- Výsledky porovnání - dvě TreeView vedle sebe -->
-        <Grid Grid.Row="2" x:Name="TextOutputPanel">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <Button Name="ButtonStart" Grid.Column="0" Content="{x:Static properties:Strings.StartComparison}" Width="160" Click="ButtonStart_Click" IsEnabled="False" />
+                <Button Name="ButtonCancel" Grid.Column="1" Content="{x:Static properties:Strings.Cancel}" Width="100" Margin="10,0,0,0" Click="ButtonCancel_Click" IsEnabled="False" Style="{StaticResource SecondaryButton}"/>
 
-            <GroupBox Header="Zdrojová složka" Grid.Column="0" Margin="0,0,10,0">
-                <TextBox Name="TextBoxSourceOutput" 
-IsReadOnly="True" 
-AcceptsReturn="True" 
-VerticalScrollBarVisibility="Auto" 
-HorizontalScrollBarVisibility="Auto"
-Margin="10,0,-2,0"
-TextWrapping="Wrap" Height="299" 
-                        Text=""/>
-            </GroupBox>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20,0,20,0">
+                    <TextBlock Text="{x:Static properties:Strings.AnalysisProgress}" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,0,0,5"/>
+                    <ProgressBar Name="ProgressBarComparison" Height="8" />
+                </StackPanel>
 
-            <GroupBox Header="Cílová složka" Grid.Column="1" Margin="10,0,0,0">
+                <Button Grid.Column="3" Content="{x:Static properties:Strings.ToggleView}" Width="150" Click="ToggleView_Click" Style="{StaticResource SecondaryButton}"/>
+            </Grid>
+        </Border>
 
-            <TextBox Name="TextBoxTargetOutput" 
-         IsReadOnly="True" 
-         AcceptsReturn="True" 
-         VerticalScrollBarVisibility="Auto" 
-         HorizontalScrollBarVisibility="Auto"
-         Margin="5"
-         TextWrapping="Wrap" TextChanged="TextBoxTargetOutput_TextChanged" Text=""/>
-              
-            </GroupBox>
+        <!-- 3. SEKCE: Výsledky porovnání -->
+        <Grid Grid.Row="2">
 
-        </Grid>
+            <!-- TEXTOVÝ VÝSTUP -->
+            <Grid x:Name="TextOutputPanel" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- TreeView -->
-        <Grid x:Name="TreeViewPanel" Grid.Row="3" Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="{x:Static properties:Strings.SourceOutput}" Style="{StaticResource HeaderTextStyle}"/>
+                        <TextBox Name="TextBoxSourceOutput" IsReadOnly="True" AcceptsReturn="True" 
+                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Background="#F9F9F9"/>
+                    </DockPanel>
+                </Border>
 
-            <GroupBox Header="Strom zdrojové složky" Grid.Column="0" Margin="0,0,10,0">
-                <TreeView Name="TreeViewSourceOutput" Margin="10" />
-            </GroupBox>
+                <Border Grid.Column="2" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="{x:Static properties:Strings.TargetOutput}" Style="{StaticResource HeaderTextStyle}"/>
+                        <TextBox Name="TextBoxTargetOutput" IsReadOnly="True" AcceptsReturn="True" 
+                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" TextChanged="TextBoxTargetOutput_TextChanged" Background="#F9F9F9"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
 
-            <GroupBox Header="Strom cílové složky" Grid.Column="1" Margin="10,0,0,0">
-                <TreeView Name="TreeViewTargetOutput" Margin="10" />
-            </GroupBox>
+            <!-- TREEVIEW VÝSTUP -->
+            <Grid x:Name="TreeViewPanel" Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="{x:Static properties:Strings.SourceTree}" Style="{StaticResource HeaderTextStyle}"/>
+                        <TreeView Name="TreeViewSourceOutput" BorderThickness="1" BorderBrush="{StaticResource BorderColor}" Background="#FAFAFA" Padding="5"/>
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Column="2" Background="{StaticResource CardBackground}" CornerRadius="8" Padding="15">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.05" BlurRadius="10" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="{x:Static properties:Strings.TargetTree}" Style="{StaticResource HeaderTextStyle}"/>
+                        <TreeView Name="TreeViewTargetOutput" BorderThickness="1" BorderBrush="{StaticResource BorderColor}" Background="#FAFAFA" Padding="5"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
         </Grid>
     </Grid>
 </Window>
