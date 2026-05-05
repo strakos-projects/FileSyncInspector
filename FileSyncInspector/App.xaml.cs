@@ -12,8 +12,8 @@ namespace FileSyncInspector
         protected override void OnStartup(StartupEventArgs e)
         {
             // Vynucení angličtiny (pokud to zakomentuješ, vezme se jazyk Windows)
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+            //Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
 
             base.OnStartup(e);
         }

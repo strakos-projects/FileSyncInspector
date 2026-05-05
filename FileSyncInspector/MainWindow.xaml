@@ -80,9 +80,12 @@
                 <Button Name="ButtonStart" Grid.Column="0" Content="{x:Static properties:Strings.StartComparison}" Width="160" Click="ButtonStart_Click" IsEnabled="False" />
                 <Button Name="ButtonCancel" Grid.Column="1" Content="{x:Static properties:Strings.Cancel}" Width="100" Margin="10,0,0,0" Click="ButtonCancel_Click" IsEnabled="False" Style="{StaticResource SecondaryButton}"/>
 
+                <!-- UPRAVENÝ STACKPANEL PRO PROGRESS A TEXT -->
                 <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20,0,20,0">
                     <TextBlock Text="{x:Static properties:Strings.AnalysisProgress}" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,0,0,5"/>
                     <ProgressBar Name="ProgressBarComparison" Height="8" />
+                    <!-- NOVÉ: Indikátor aktuálního souboru/složky -->
+                    <TextBlock Name="TextBlockCurrentOperation" Text="..." FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                 </StackPanel>
 
                 <Button Grid.Column="3" Content="{x:Static properties:Strings.ToggleView}" Width="150" Click="ToggleView_Click" Style="{StaticResource SecondaryButton}"/>
